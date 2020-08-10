@@ -26,18 +26,55 @@
     };
 
     var game = new Phaser.Game(config);
+    var player;
 
     function preload ()
     {
+        this.load.spritesheet('player', 
+        'assets/satellite.png',
+        { frameWidth: 64, frameHeight: 64 }
+    );
     }
 
     function create ()
     {
+        player = this.physics.add.sprite(400, 400 ,'player')
     }
 
     function update ()
     {
+        if (cursors.left.isDown)
+        {
+            player.setVelocityX(-10);
+
+            player.anims.play('left', true);
+        }
+        else if (cursors.right.isDown)
+        {
+            player.setVelocityX(10);
+
+            player.anims.play('right', true);
+        }
+        else if (cursors.up.isDown)
+        {
+            player.setVelocityY(-10);
+        } 
+        else if (cursors.down.isDown)
+        {
+            player.setVelocityY(10);
+        }
+        else
+        {
+            player.setVelocityX(0);
+        }
+
+        
     }
+    //Stop movement after 2 seconds (should be on target)
+    game.time.events.add(2000, function () {
+    player.body.velocity.x = 0;
+    player.body.velocity.y = 0;
+    }, this);
 
 </script>
 
