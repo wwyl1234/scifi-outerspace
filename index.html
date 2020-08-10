@@ -18,6 +18,13 @@
         type: Phaser.AUTO,
         width: 800,
         height: 600,
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 0 },
+                debug: false
+            }
+        },
         scene: {
             preload: preload,
             create: create,
@@ -27,6 +34,7 @@
 
     var game = new Phaser.Game(config);
     var player;
+    var cursors;
 
     function preload ()
     {
@@ -39,29 +47,30 @@
     function create ()
     {
         player = this.physics.add.sprite(400, 400 ,'player')
+        cursors = this.input.keyboard.createCursorKeys();
     }
 
     function update ()
     {
         if (cursors.left.isDown)
         {
-            player.setVelocityX(-10);
+            player.setVelocityX(-70);
 
-            player.anims.play('left', true);
+   
         }
         else if (cursors.right.isDown)
         {
-            player.setVelocityX(10);
+            player.setVelocityX(70);
 
-            player.anims.play('right', true);
+         
         }
         else if (cursors.up.isDown)
         {
-            player.setVelocityY(-10);
+            player.setVelocityY(-70);
         } 
         else if (cursors.down.isDown)
         {
-            player.setVelocityY(10);
+            player.setVelocityY(70);
         }
         else
         {
@@ -70,12 +79,7 @@
 
         
     }
-    //Stop movement after 2 seconds (should be on target)
-    game.time.events.add(2000, function () {
-    player.body.velocity.x = 0;
-    player.body.velocity.y = 0;
-    }, this);
-
+   
 </script>
 
 </body>
