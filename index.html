@@ -33,36 +33,68 @@
     };
 
     var game = new Phaser.Game(config);
+    var gameOver = false;
+
     var player;
     var cursors;
+    var asteroids;
+    var makeAsteroid = true;
 
+    const defaultPlayerX = 400; // 400px at x coordinate
+    const defaultPlayerY = 400; // 400px at y coordinate
+
+    // This is the preload webhook.
     function preload ()
     {
-        this.load.spritesheet('player', 
-        'assets/satellite.png',
-        { frameWidth: 64, frameHeight: 64 }
-    );
+        this.load.spritesheet(
+            'player', 
+            'assets/satellite.png',
+            { frameWidth: 64, frameHeight: 64 }
+        );
+        // load the asteroids
+        this.load.spritesheet(
+            'asteroidPotato',
+            'assets/asteroid_potato.png',
+            { frameWidth: 64, frameHeight: 64 }
+        );
     }
 
+     // This is the create webhook.
     function create ()
     {
-        player = this.physics.add.sprite(400, 400 ,'player')
+        player = this.physics.add.sprite(defaultPlayerX, defaultPlayerY ,'player')
+        player.setCollideWorldBounds(true);
+        player.onWorldBounds = true;
+        
+        asteroids = this.physics.add.group();
+
+        this.physics.add.collider(player, asteroids, hitAsteroid, null, this);
         cursors = this.input.keyboard.createCursorKeys();
     }
 
+     // This is the update webhook.
     function update ()
     {
+        // need logic or event to make asteroids
+        if (makeAsteroid){
+            var asteroid = asteroids.create(32, 32, 'asteroidPotato');
+            makeAsteroid = false;
+        }
+
+
+        // Ensure all the asteroids are moving downwards
+        Phaser.Actions.Call(asteroids.getChildren(), function(go) {
+            go.setVelocityY(100);
+        })
+   
+        // Logic for player's movement of the satellite
         if (cursors.left.isDown)
         {
             player.setVelocityX(-70);
-
-   
         }
         else if (cursors.right.isDown)
         {
             player.setVelocityX(70);
-
-         
         }
         else if (cursors.up.isDown)
         {
@@ -75,11 +107,18 @@
         else
         {
             player.setVelocityX(0);
-        }
-
-        
+        } 
     }
-   
+
+// Game is paused when asteroid hits player.
+function hitAsteroid(player, asteroid){
+    this.physics.pause();
+
+    player.setTint(0xff0000);
+
+    gameOver = true;
+} 
+
 </script>
 
 </body>
