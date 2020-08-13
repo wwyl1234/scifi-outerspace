@@ -23,10 +23,11 @@ var config = {
 var game = new Phaser.Game(config);
 var gameOver = false;
 
+var createAsteroidsTimer;
+var timer;
 var player;
 var cursors;
 var asteroids;
-var makeAsteroid = true;
 var emitter;
 
 const defaultPlayerX = 400; // 400px at x coordinate
@@ -62,6 +63,20 @@ function preload ()
  // This is the create webhook.
 function create ()
 {
+    // Create the timer
+    createAsteroidsTimer = this.time.addEvent({
+        delay: 4000,
+        callback: createAsteroidHandler,
+        callbackScope: this,
+        loop: true
+    });
+
+    timer = this.time.addEvent({
+        delay: 1000,
+        callback: secondHandler,
+        callbackScope: this,
+        loop: true
+    });
 
     //  Create our own EventEmitter instance
     emitter = new Phaser.Events.EventEmitter();
@@ -81,14 +96,7 @@ function create ()
  // This is the update webhook.
 function update ()
 {
-    // need logic or event to make asteroids
-    if (makeAsteroid){
-        emitter.emit('createAsteroid');
-        //var asteroid = asteroids.create(32, 32, 'asteroidPotato');
-        makeAsteroid = false;
-    }
-
-
+ 
     // Ensure all the asteroids are moving downwards
     Phaser.Actions.Call(asteroids.getChildren(), function(go) {
         go.setVelocityY(100);
@@ -127,6 +135,11 @@ function createAsteroidHandler(){
     let asteroid = asteroids.create(xPos, yPos, asteroidName);
 }
 
+// The eventHandler to keep track of time by seconds and decreases the delay time for createAsteroidHandler
+function secondHandler(){
+    createAsteroidsTimer.delay -= 1;
+}
+
 // Game is paused when asteroid hits player.
 function hitAsteroid(player, asteroid){
     this.physics.pause();
@@ -134,4 +147,6 @@ function hitAsteroid(player, asteroid){
     player.setTint(0xff0000);
 
     gameOver = true;
+    createAsteroidsTimer.paused = true;
+    timer.paused = true;
 } 
