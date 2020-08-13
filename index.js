@@ -1,0 +1,137 @@
+const WIDTH = 800; // 800px
+const HEIGHT = 600; // 600px
+const ASTEROID_NAMES = ['asteroidPotato', 'asteroidCircle', 'asteroidRedSpikes' ];
+
+var config = {
+    type: Phaser.AUTO,
+    width: WIDTH,
+    height: HEIGHT,
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 0 },
+            debug: false
+        }
+    },
+    scene: {
+        preload: preload,
+        create: create,
+        update: update
+    }
+};
+
+var game = new Phaser.Game(config);
+var gameOver = false;
+
+var player;
+var cursors;
+var asteroids;
+var makeAsteroid = true;
+var emitter;
+
+const defaultPlayerX = 400; // 400px at x coordinate
+const defaultPlayerY = 400; // 400px at y coordinate
+
+// This is the preload webhook.
+function preload ()
+{
+    this.load.spritesheet(
+        'player', 
+        'assets/satellite.png',
+        { frameWidth: 64, frameHeight: 64 }
+    );
+    // load the asteroids
+    this.load.spritesheet(
+        'asteroidPotato',
+        'assets/asteroid_potato.png',
+        { frameWidth: 64, frameHeight: 64 }
+    );
+
+    this.load.spritesheet(
+        'asteroidCircle',
+        'assets/asteroid_circle.png',
+        { frameWidth: 64, frameHeight: 64 }
+    );
+    this.load.spritesheet(
+        'asteroidRedSpikes',
+        'assets/asteroid_red_spikes.png',
+        { frameWidth: 64, frameHeight: 64 }
+    );
+}
+
+ // This is the create webhook.
+function create ()
+{
+
+    //  Create our own EventEmitter instance
+    emitter = new Phaser.Events.EventEmitter();
+     //  Set-up an event handler
+    emitter.on('createAsteroid', createAsteroidHandler, this);
+
+    player = this.physics.add.sprite(defaultPlayerX, defaultPlayerY ,'player')
+    player.setCollideWorldBounds(true);
+    player.onWorldBounds = true;
+    
+    asteroids = this.physics.add.group();
+
+    this.physics.add.collider(player, asteroids, hitAsteroid, null, this);
+    cursors = this.input.keyboard.createCursorKeys();
+}
+
+ // This is the update webhook.
+function update ()
+{
+    // need logic or event to make asteroids
+    if (makeAsteroid){
+        emitter.emit('createAsteroid');
+        //var asteroid = asteroids.create(32, 32, 'asteroidPotato');
+        makeAsteroid = false;
+    }
+
+
+    // Ensure all the asteroids are moving downwards
+    Phaser.Actions.Call(asteroids.getChildren(), function(go) {
+        go.setVelocityY(100);
+    })
+
+    // Logic for player's movement of the satellite
+    if (cursors.left.isDown)
+    {
+        player.setVelocityX(-70);
+    }
+    else if (cursors.right.isDown)
+    {
+        player.setVelocityX(70);
+    }
+    else if (cursors.up.isDown)
+    {
+        player.setVelocityY(-70);
+    } 
+    else if (cursors.down.isDown)
+    {
+        player.setVelocityY(70);
+    }
+    else
+    {
+        // Player doesn't move unless arrow up, down, left, and right, buttons are pressed
+        player.setVelocityX(0);
+        player.setVelocityY(0);
+    } 
+}
+
+// The eventHandler to create asteroid at a random x position at the top of the screen.
+function createAsteroidHandler(){
+    let xPos = Math.floor(Math.random() * WIDTH);
+    let yPos = 0;
+    let asteroidName = ASTEROID_NAMES[Math.floor(Math.random() * ASTEROID_NAMES.length)];        
+    let asteroid = asteroids.create(xPos, yPos, asteroidName);
+}
+
+// Game is paused when asteroid hits player.
+function hitAsteroid(player, asteroid){
+    this.physics.pause();
+
+    player.setTint(0xff0000);
+
+    gameOver = true;
+} 
