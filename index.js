@@ -38,6 +38,8 @@ const defaultPlayerY = 400; // 400px at y coordinate
 // This is the preload webhook.
 function preload ()
 {
+    this.load.image('space', 'assets/space_background.png');
+
     this.load.spritesheet(
         'player', 
         'assets/satellite.png',
@@ -65,6 +67,9 @@ function preload ()
  // This is the create webhook.
 function create ()
 {
+    // Add the backgound image
+    this.add.image(WIDTH/2, HEIGHT/2, 'space');
+
     // Create the timer
     createAsteroidsTimer = this.time.addEvent({
         delay: 4000,
