@@ -26,6 +26,8 @@ var gameOver = false;
 var createAsteroidsTimer;
 var timer;
 var player;
+var playerVelocityX = 0;
+var playerVelocityY = 0;
 var cursors;
 var asteroids;
 var emitter;
@@ -105,26 +107,49 @@ function update ()
     // Logic for player's movement of the satellite
     if (cursors.left.isDown)
     {
-        player.setVelocityX(-70);
+        if (playerVelocityX >= 0 )
+        {
+            playerVelocityX = -50;
+        } else {
+            playerVelocityX -= 10;
+        }
     }
     else if (cursors.right.isDown)
     {
-        player.setVelocityX(70);
+        if (playerVelocityX <= 0 )
+        {
+            playerVelocityX = 50;
+        } else {
+            playerVelocityX += 10;
+        }
     }
     else if (cursors.up.isDown)
     {
-        player.setVelocityY(-70);
+        if (playerVelocityY >= 0 )
+        {
+            playerVelocityY = -50;
+        } else {
+            playerVelocityY -= 10;
+        }
     } 
     else if (cursors.down.isDown)
     {
-        player.setVelocityY(70);
+        if (playerVelocityY <= 0 )
+        {
+            playerVelocityY = 50;
+        } else {
+            playerVelocityY += 10;
+        }
     }
     else
     {
         // Player doesn't move unless arrow up, down, left, and right, buttons are pressed
-        player.setVelocityX(0);
-        player.setVelocityY(0);
+        playerVelocityX = 0;
+        playerVelocityY = 0;
     } 
+
+    player.setVelocityX(playerVelocityX);
+    player.setVelocityY(playerVelocityY);
 }
 
 // The eventHandler to create asteroid at a random x position at the top of the screen.
