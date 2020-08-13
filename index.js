@@ -41,7 +41,7 @@ function preload ()
     this.load.spritesheet(
         'player', 
         'assets/satellite.png',
-        { frameWidth: 64, frameHeight: 64 }
+        { frameWidth: 64, frameHeight: 64}
     );
     // load the asteroids
     this.load.spritesheet(
@@ -158,6 +158,9 @@ function createAsteroidHandler(){
     let yPos = 0;
     let asteroidName = ASTEROID_NAMES[Math.floor(Math.random() * ASTEROID_NAMES.length)];        
     let asteroid = asteroids.create(xPos, yPos, asteroidName);
+    // The offset is for users to be able to see the asteroid.
+    let offset = 0.5
+    asteroid.setScale(Math.random() + offset);
 }
 
 // The eventHandler to keep track of time by seconds and decreases the delay time for createAsteroidHandler
