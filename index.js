@@ -33,6 +33,7 @@ var asteroids;
 var emitter;
 var displayTimer = '00:00:00'
 var timerText;
+var winText;
 
 const defaultPlayerX = 400; // 400px at x coordinate
 const defaultPlayerY = 400; // 400px at y coordinate
@@ -73,6 +74,7 @@ function create ()
     this.add.image(WIDTH/2, HEIGHT/2, 'space');
 
     timerText = this.add.text(0,0, "Time: " + displayTimer);
+    winText = this.add.text(WIDTH/2, HEIGHT/2, "");
 
     // Create the timer
     createAsteroidsTimer = this.time.addEvent({
@@ -93,6 +95,7 @@ function create ()
     emitter = new Phaser.Events.EventEmitter();
      //  Set-up an event handler
     emitter.on('createAsteroid', createAsteroidHandler, this);
+    emitter.on('gameWon', gameWonHandler, this);
 
     player = this.physics.add.sprite(defaultPlayerX, defaultPlayerY ,'player')
     player.setCollideWorldBounds(true);
@@ -107,6 +110,9 @@ function create ()
  // This is the update webhook.
 function update ()
 {
+    if (displayTimer === "01:00:00"){
+        emitter.emit("gameWon", gameWonHandler, this);
+    }
  
     // Ensure all the asteroids are moving downwards
     Phaser.Actions.Call(asteroids.getChildren(), function(go) {
@@ -177,6 +183,16 @@ function secondHandler(){
     createAsteroidsTimer.delay -= 1;
     updateTimer();
     
+    
+}
+
+// The eventHandler to let players know that they won the game.
+function gameWonHandler(){
+    // Game is paused when game is won by surviving for an hour in this game.
+    this.physics.pause();
+    createAsteroidsTimer.paused = true;
+    timer.paused = true;
+    winText.setText("Game Won!!! Congrats!")
 }
 
 // Game is paused when asteroid hits player.
