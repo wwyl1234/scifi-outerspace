@@ -156,12 +156,6 @@ function update ()
             playerVelocityY += 10;
         }
     }
-    else
-    {
-        // Player doesn't move unless arrow up, down, left, and right, buttons are pressed
-        playerVelocityX = 0;
-        playerVelocityY = 0;
-    } 
 
     player.setVelocityX(playerVelocityX);
     player.setVelocityY(playerVelocityY);
@@ -221,3 +215,44 @@ function updateTimer(){
         newMinutes.toString().padStart(2, "0") + ":" + newSeconds.toString().padStart(2, "0");
     timerText.setText("Time: " + displayTimer);
 }
+
+
+// Movement via buttons 
+$(document).ready(function() {
+    $("#moveUp").click(function() {
+        console.log("here")
+        if (playerVelocityY >= 0 )
+        {
+            playerVelocityY = -50;
+        } else {
+            playerVelocityY -= 10;
+        }
+    });
+
+    $("#moveDown").click(function() {
+        if (playerVelocityY <= 0 )
+        {
+            playerVelocityY = 50;
+        } else {
+            playerVelocityY += 10;
+        }
+    });
+
+    $("#moveLeft").click(function() {
+        if (playerVelocityX >= 0 )
+        {
+            playerVelocityX = -50;
+        } else {
+            playerVelocityX -= 10;
+        }
+    });
+
+    $("#moveRight").click(function() {
+        if (playerVelocityX <= 0 )
+        {
+            playerVelocityX = 50;
+        } else {
+            playerVelocityX += 10;
+        }
+    });
+});
