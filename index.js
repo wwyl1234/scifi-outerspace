@@ -31,6 +31,8 @@ var playerVelocityY = 0;
 var cursors;
 var asteroids;
 var emitter;
+var displayTimer = '00:00:00'
+var timerText;
 
 const defaultPlayerX = 400; // 400px at x coordinate
 const defaultPlayerY = 400; // 400px at y coordinate
@@ -69,6 +71,8 @@ function create ()
 {
     // Add the backgound image
     this.add.image(WIDTH/2, HEIGHT/2, 'space');
+
+    timerText = this.add.text(0,0, "Time: " + displayTimer);
 
     // Create the timer
     createAsteroidsTimer = this.time.addEvent({
@@ -171,6 +175,8 @@ function createAsteroidHandler(){
 // The eventHandler to keep track of time by seconds and decreases the delay time for createAsteroidHandler
 function secondHandler(){
     createAsteroidsTimer.delay -= 1;
+    updateTimer();
+    
 }
 
 // Game is paused when asteroid hits player.
@@ -183,3 +189,19 @@ function hitAsteroid(player, asteroid){
     createAsteroidsTimer.paused = true;
     timer.paused = true;
 } 
+
+// Updates the timer displayed on the game screen
+function updateTimer(){
+    let time = displayTimer.split(":");
+    let hours = parseInt(time[0]);
+    let minutes = parseInt(time[1]);
+    let seconds = parseInt(time[2]);
+    let totalSeconds = hours * 60 * 60 + minutes * 60 + seconds;
+    let newTotalSeconds = totalSeconds += 1;
+    let newHours = Math.floor(newTotalSeconds / (60 * 60));
+    let newMinutes = Math.floor((newTotalSeconds - newHours * 60 * 60) / 60);
+    let newSeconds = newTotalSeconds - newHours * 60 * 60 - newMinutes * 60;
+    displayTimer = newHours.toString().padStart(2, "0") + ":" + 
+        newMinutes.toString().padStart(2, "0") + ":" + newSeconds.toString().padStart(2, "0");
+    timerText.setText("Time: " + displayTimer);
+}
