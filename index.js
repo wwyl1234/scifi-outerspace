@@ -1,6 +1,6 @@
 const WIDTH = 800; // 800px
 const HEIGHT = 600; // 600px
-const ASTEROID_NAMES = ['asteroidPotato', 'asteroidCircle', 'asteroidRedSpikes' ];
+const ASTEROID_NAMES = ['asteroidPotato', 'asteroidCircle', 'asteroidRedSpikes'];
 
 var config = {
     type: Phaser.AUTO,
@@ -25,18 +25,22 @@ var gameOver = false;
 
 var createAsteroidsTimer;
 var timer;
+var displayTimer = '00:00:00'
+
+var emitter;
+
 var player;
 var playerVelocityX = 0;
 var playerVelocityY = 0;
+
 var cursors;
 var asteroids;
-var emitter;
-var displayTimer = '00:00:00'
+
 var timerText;
 var winText;
 
-const defaultPlayerX = 400; // 400px at x coordinate
-const defaultPlayerY = 400; // 400px at y coordinate
+const DEFAULTPLAYERX = 400; // 400px at x coordinate
+const DEFAULTPLAYERY = 400; // 400px at y coordinate
 
 // This is the preload webhook.
 function preload ()
@@ -48,6 +52,7 @@ function preload ()
         'assets/satellite.png',
         { frameWidth: 64, frameHeight: 64}
     );
+
     // load the asteroids
     this.load.spritesheet(
         'asteroidPotato',
@@ -73,10 +78,11 @@ function create ()
     // Add the backgound image
     this.add.image(WIDTH/2, HEIGHT/2, 'space');
 
-    timerText = this.add.text(0,0, "Time: " + displayTimer);
-    winText = this.add.text(WIDTH/2, HEIGHT/2, "");
+    // Added placeholders for where the texts should be
+    timerText = this.add.text(0, 0, "Time: " + displayTimer);
+    winText = this.add.text(WIDTH / 2, HEIGHT / 2, "");
 
-    // Create the timer
+    // Create the timers
     createAsteroidsTimer = this.time.addEvent({
         delay: 4000,
         callback: createAsteroidHandler,
@@ -93,11 +99,11 @@ function create ()
 
     //  Create our own EventEmitter instance
     emitter = new Phaser.Events.EventEmitter();
-     //  Set-up an event handler
+    //  Set-up event handlers
     emitter.on('createAsteroid', createAsteroidHandler, this);
     emitter.on('gameWon', gameWonHandler, this);
 
-    player = this.physics.add.sprite(defaultPlayerX, defaultPlayerY ,'player')
+    player = this.physics.add.sprite(DEFAULTPLAYERX, DEFAULTPLAYERY ,'player')
     player.setCollideWorldBounds(true);
     player.onWorldBounds = true;
     
@@ -110,6 +116,7 @@ function create ()
  // This is the update webhook.
 function update ()
 {
+    // Game is won after timer has reached 1 hour
     if (displayTimer === "01:00:00"){
         emitter.emit("gameWon", gameWonHandler, this);
     }
@@ -176,8 +183,6 @@ function createAsteroidHandler(){
 function secondHandler(){
     createAsteroidsTimer.delay -= 1;
     updateTimer();
-    
-    
 }
 
 // The eventHandler to let players know that they won the game.
