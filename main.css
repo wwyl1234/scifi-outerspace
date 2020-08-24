@@ -16,8 +16,8 @@ body {
     margin-left: 850px;
     margin-right: 20px;
     display: grid;
-    grid-template-columns: 5em 5em 5em 5em 5em 5em 5em;
-    grid-template-rows: 5em 5em;
+    grid-template-columns: 4em 4em 4em 4em 4em 4em 4em;
+    grid-template-rows: 4em 4em;
 }
 
 /* Style the moveUp button */
@@ -64,7 +64,7 @@ canvas {
         margin-top: 700px;
         margin-left: 100px;
         display: grid;
-        grid-template-columns: 5em 5em 5em 5em 5em 5em 5em;
-        grid-template-rows: 5em 5em;
+        grid-template-columns: 4em 4em 4em 4em 4em 4em 4em;
+        grid-template-rows: 4em 4em;
     }
 } 
