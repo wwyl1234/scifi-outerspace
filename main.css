@@ -13,7 +13,8 @@ body {
 /* Style fo the Movement pad  */ 
 #movementPad{
     margin-top: 400px;
-    margin-left: 900px;
+    margin-left: 850px;
+    margin-right: 20px;
     display: grid;
     grid-template-columns: 5em 5em 5em 5em 5em 5em 5em;
     grid-template-rows: 5em 5em;
@@ -57,7 +58,7 @@ canvas {
     font-family: 'Share Tech', sans-serif;
 }
 
-/* Devices with screens that are less than or equals to 600px wide */
+/* Screens that are less than or equals to 600px wide */
 @media only screen and (max-width: 600px) {
     #movementPad {
         margin-top: 700px;
