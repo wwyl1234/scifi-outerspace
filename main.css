@@ -1,8 +1,16 @@
-body {
-    padding: 10px;
-    overflow: scroll;
+/* Style the html */
+html{
+    height: 100%
 }
 
+/* Style the body */
+body {
+    margin: 0;
+    min-height: 100%;
+    overflow: hidden;
+}
+
+/* Style fo the Movement pad  */ 
 #movementPad{
     margin-top: 400px;
     margin-left: 900px;
@@ -11,28 +19,51 @@ body {
     grid-template-rows: 5em 5em;
 }
 
+/* Style the moveUp button */
 #moveUp{
     grid-column: 2 / span 1;
     grid-row: 1 / span 1;
 }
 
+/* Style the moveDown button */
 #moveDown{
     grid-column: 2 / span 1;
     grid-row: 2 / span 1;
 }
 
+/* Style the moveLeft button */
 #moveLeft{
     grid-column: 1 / span 1;
     grid-row: 2 / span 1;
  
 }
 
+/* Style the moveRight button */
 #moveRight{
     grid-column: 3 / span 1;
     grid-row: 2 / span 1;
 }
 
+/* Style the canvas */
 canvas {
+    margin-left: 10px;
     position: absolute;
     top: 10%;
 }
+
+/* Style the game info */
+#gameInfo{
+    margin-left: 10px;
+    font-family: 'Share Tech', sans-serif;
+}
+
+/* Devices with screens that are less than or equals to 600px wide */
+@media only screen and (max-width: 600px) {
+    #movementPad {
+        margin-top: 700px;
+        margin-left: 100px;
+        display: grid;
+        grid-template-columns: 5em 5em 5em 5em 5em 5em 5em;
+        grid-template-rows: 5em 5em;
+    }
+} 
